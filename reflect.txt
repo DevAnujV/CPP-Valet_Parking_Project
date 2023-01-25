@@ -1,0 +1,110 @@
+//I have done all the coding by myself and only copied the code that my professor provided to complete my project milestones.
+// Name - Anuj Verma
+// Student Number - 180483216
+// Student email - averma100@myseneca.ca
+// Date Completed - 12/08/2022
+
+This whole project was devided into 5 milestones. The fifth milestone is further devided into 6 functionalities.
+In thi sreflection, I will try to explain what each milestone was responsible for doing.
+To begin with, In milestone 1, we have to basically make a layout of the menu for our
+app. Two classes mainly called dMenu and MenuItem was made in which the Menu class was made a
+friend of MenuItem so that it have access to the guts of class. Also this class was made
+so that no other class can copy this class. 
+		Menu(Menu&) = delete;
+		Menu& operator=(const Menu&) = delete;
+While displaying the menu, different indentations styles were printed for menu and sub menu. It was made
+possible by sending another parameter (integer) which takes care of how much indentation to be applied (4 or 8 spaces)
+This way whole menu and submenu structure (it does not include actual menu and submenu) was made appeared in the first milestone.
+
+In milestone 2, it included going a bit deep into the milestone and making 2 classes, parking and menu.
+This milestone is responsible for actual framework or displaying of the respective menu and submenu
+items. Constructor of MenuItems is accepting 3 arguments, first is responsible for setting the indentation
+After that, respective m_title and m_menuTitle is stored into the object.
+Most interesting implementation was on the run function. Whole run was implemented in a big while loop,
+which based on user selection (from 6 options) either park vehicle, return vehicle, exit program, etc,etc.
+Until and unless option 6 (exit parking) is selected, the loop will not break and will keep showing
+the main menu options. Moving further, some additional checks were applied here for example, user can only
+proceed further with Y or y or N or n otherwise, the system will keep promting to reenter a valid response, etc.
+Hence, it was basically responsible for making a framework for actually how the menu layout is to be look like.
+
+Milestone 3, started to deal with some inner concepts of programming and milestone execution. In this, 
+we have to make a base class called ReadWriteable and have to make a derived class out of it. ReadWriteable
+is just responsible for setting a flag to either read/write the data in CSV format of non CSV format.
+ReadWriteable class is an abstract based class due to some pure virtual functions (writetype) in it.
+Another class called Vehicle was made which have make and model of vehicle dynamically in it. This class
+makes sure that DMA and rule of 3 is followed. 
+Here keep in mind that both the derived an dbase classes are abstract based class so cannot be instantiated
+until the pure virtual methods are defined (it is being done in main, where writetype function is being
+defined. Hence, this class basically deals with reading data from the console in the CSV and non-CSV form
+and perform validations. Again, this is just a framework for the actual data that we will put in for vehicle
+later in the milestones.
+
+Comming to Milestone 4 - this milestone included a dummy of addition of vehicles to the 
+parking. It consists of making of 2 more derived classes called motorcycle and car out of
+vehicle and have some of the member functions overridden (like read and write). Alos the
+car and motorcycle have some additional bool varibles in it like carwash while parked for car
+and has sidecar or not for motorcycle. Both these classes follow fule of 3. and based on the 
+setCSV value while running the program, it will prompt us to enter the details of a car or motorcycle
+either in the form of CSV or without CSV. It first call the read and write of vehicle for entry and 
+display of vehicle licenceplate and make and model and then, ask for either Carwash while parked (for CAR and for motorcycle it is have sidecar or not?)(y or n) or in the 
+form of CSV (X,X 0 or 1). Similarly, the write function works. And that is pretty much everything for this part. It will validate all the information, certain checks like
+if the enetered value for yes or no if Y or y or N or n, etc. etc.. Finally, it was a great milestone to wor with. It included bringing in action the role of previous classes
+with some new features.
+
+Finally, moving to Milestone 5 - It is further broken into 6 parts. Each part is resposible for performing a perticular task. So, lets break it down one by one.
+
+By the way - new member variables were aded to the parkign.cpp file -
+		const int m_maxParkingSpots = 100;
+		int m_noOfSpots{};
+		Vehicle* m_parkingSpotPointer[100]{};
+		int m_noOfParkedVehicles{};
+Their are being used in various stages expalined above. But they basically help to keep trakc of the parking
+vahicles, for eg - no of spots available, number of vehicle parked, etc.
+
+Here in Milestone 5,we have created an array of pointers of type vehicle (Vehicle* m_parkingSpotPointer[100]{}), which can hold or point to any
+vehicle (car or motorcycle) (parents can points to children) and its maximum value is a 100 that means there
+cannot be more than 100 parking spots in the parking. Each pointer will represent one spot pointing to
+either a car or a motorcycle. Moving further, it works this way, a loadFile function will read the data from the file and based on what character it
+encounters, C or M, it will create a dynamic new car or a motorcycle. Then it will assign all the values to it
+in the form of CSV format (from file continuing after C) and will make the Vehicle pointer point to that vehicle.
+The index of the vehicle pointer will be based on the parking spot of the vehicle. Thus we can have parkign spot 1
+pointing to a car, 2 to a bike, 3 to car and lets say in the file parking spot 4 was not assigned to any vehicle.
+In that case the parking spot 4 pointer of vehicle will point to null. And moving on all the spots will point to a vehicle
+till all the data is read from file (EOF is reached). Also, as soon as a new Car or vehicle is made, we can keep adding 1 to m_noOfParkedVehicles to keep a track on vehicles.
+Also, another function saveDataFile() was created to overwrite all the information stored in the vehicle pointer in the form of CSV to the file before deallocating the memory.
+
+DMA and rule of 3 is extremely important implementation here because we are making alot of new motorcycles and cars here depending on parking. So we have to delete all the
+dynamic objetcs before exiting the program. This was achieved by deleting each (delete m_parkingSpotPointer[i]) parking pointer inside of a loop based on how many spots
+are there. It could not be based on m_numberofParkedVehicles because it can skip a parking spot. Lets say parking vehicles are 8 but the spots are 9 (maye the spot 3 is skipped)
+so in that case deleting will give error, so logic is made such that, if the parkingSopt is pointing to null, the deletion is skipped and moved to next one
+
+Also, very important ** the logic in destructor is such that if the parkign spot pointer (vehile pointer) is not null, then omly it goes for deletion. This is made to prevent
+compiler errors) because in some cases like return vehicle and close parking, the vehicles pointers are being deleted. So, the deallocation function will check for nullptr
+and if the spot is not nullptr, then only it will go for deletion.**
+
+
+Milestone 5-part 1 - It just deals with checking the Exit parking logic (when 6 is entered). It will also
+display the contents of ParkingData.csv after the program exits just to make sure that all the data is saved
+in there as per requirement.
+
+Milestone 5-part 2 - It deals with testing the logic for showing a list of all the parked vehicles (reading them in form of CSV
+from the file) and the output is matched to see if the read/load was successful. Again, the contents of the
+file is matched int he end to make sure no changes or if any changes made to file, output should match.
+
+Milestone 5 - part 3 - It deals with logic of finding a vehicle. by performing a search on the vehicle pointer array
+based on licence plate number. If not found, display the not found massege and if found should dislay
+the vehicle in the non CSV format.
+Finally, again the (6th option) exit program is selected and it will match the content of file.
+
+Milestone 5 part 4 - It deals with the logic for Selected option 5, which is close parking. In this, all the vehicles are towed out (delete the vehicle pointer in loop and setting them to nullptr) and 
+m_noOfParkedVehicles should be decremented by 1 each time a vehicle is towed. Also, saves the data in the file and validate if afterwards. (file should be empty and available spots should be 10)
+
+Milestone 5 part 5 -  It checks for the logic of return vehicle (number 2 option). It will ask for number plate, if found, it will first display the non CSV verdion ofthe
+vehicle and then it check its parking spot number and based on that, it will delete that (index-1) pointer from the vehicle pointer. and also decrement the m_parkedVehicles by 1.
+
+Lastly, Milestone 5 part 6 is the main addition of the vehicle part which can allow user to add a vehicle to the parking. This will ask if the added vehicle is a car or a
+motorcycle and based on that and if the parking is available (spot is empty), will dynamically create a car or motorcycle and give its handle to Vehicle pointer. Also, numberofParkedVehicles
+will be increased by 1. Also here vehicle will be added to the parking sopt based on what first spot is available (i.e. which first index pointer is pointing to nullptr).
+
+Finally, destructor implementation will make sure that all the allocated vehicles are to be deleted with making it virtual will call all the destructor and hence we have no memory leak.
+It was a great workshop to work with overall. it have helped me alot in understanding classes with resources, DMA, interfaces, etc etc....
